@@ -902,6 +902,45 @@ abstract class GradleKpmLinuxArm64Variant @Inject constructor(
     }
 }
 
+abstract class GradleKpmOhosArm64Variant @Inject constructor(
+    containingModule: GradleKpmModule,
+    fragmentName: String,
+    dependencyConfigurations: GradleKpmFragmentDependencyConfigurations,
+    compileDependencyConfiguration: Configuration,
+    apiElementsConfiguration: Configuration,
+    hostSpecificMetadataElementsConfiguration: Configuration?
+) : GradleKpmNativeVariantInternal(
+    containingModule = containingModule,
+    fragmentName = fragmentName,
+    konanTarget = KonanTarget.OHOS_ARM64,
+    dependencyConfigurations = dependencyConfigurations,
+    compileDependencyConfiguration = compileDependencyConfiguration,
+    apiElementsConfiguration = apiElementsConfiguration,
+    hostSpecificMetadataElementsConfiguration = hostSpecificMetadataElementsConfiguration
+) {
+    companion object {
+        val constructor = GradleKpmNativeVariantConstructor(
+            KonanTarget.OHOS_ARM64,
+            GradleKpmOhosArm64Variant::class.java
+        ) { containingModule: GradleKpmModule,
+            fragmentName: String,
+            dependencyConfigurations: GradleKpmFragmentDependencyConfigurations,
+            compileDependencyConfiguration: Configuration,
+            apiElementsConfiguration: Configuration,
+            hostSpecificMetadataElementsConfiguration: Configuration? ->
+            containingModule.project.objects.newInstance(
+                GradleKpmOhosArm64Variant::class.java,
+                containingModule,
+                fragmentName,
+                dependencyConfigurations,
+                compileDependencyConfiguration,
+                apiElementsConfiguration,
+                hostSpecificMetadataElementsConfiguration
+            )
+        }
+    }
+}
+
 abstract class GradleKpmLinuxArm32HfpVariant @Inject constructor(
     containingModule: GradleKpmModule,
     fragmentName: String,
@@ -1115,6 +1154,7 @@ internal fun kpmNativeVariantClass(konanTarget: KonanTarget): Class<out GradleKp
     KonanTarget.LINUX_ARM32_HFP -> GradleKpmLinuxArm32HfpVariant::class.java
     KonanTarget.LINUX_MIPS32 -> GradleKpmLinuxMips32Variant::class.java
     KonanTarget.LINUX_MIPSEL32 -> GradleKpmLinuxMipsel32Variant::class.java
+    KonanTarget.OHOS_ARM64 -> GradleKpmOhosArm64Variant::class.java
     KonanTarget.WASM32 -> GradleKpmWasm32Variant::class.java
     else -> null
 }

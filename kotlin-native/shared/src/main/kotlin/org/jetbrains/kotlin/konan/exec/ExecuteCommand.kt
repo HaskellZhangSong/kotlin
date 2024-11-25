@@ -76,6 +76,7 @@ open class Command(initialCommand: List<String>, val redirectInputFile: File? = 
 
     open fun execute() {
         log()
+        println(command.joinToString(" "))
         val code = runProcess()
         handleExitCode(code, stdError)
     }

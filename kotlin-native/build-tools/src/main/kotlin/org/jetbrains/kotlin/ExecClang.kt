@@ -49,11 +49,11 @@ abstract class ExecClang @Inject constructor(
         return clangArgsForCppRuntime(target)
     }
 
-    fun resolveExecutable(executableOrNull: String?): String {
+    fun resolveExecutable(executableOrNull: String?, target: String? = null): String {
         val executable = executableOrNull ?: "clang"
 
         if (listOf("clang", "clang++").contains(executable)) {
-            return "${platformManager.hostPlatform.absoluteLlvmHome}/bin/$executable"
+            return "${platformManager.hostPlatform.absoluteLlvmHome(target)}/bin/$executable"
         } else {
             throw GradleException("unsupported clang executable: $executable")
         }
@@ -87,11 +87,11 @@ abstract class ExecClang @Inject constructor(
     // (nullable, which means host) target name.
 
     fun execKonanClang(target: String?, action: Action<in ExecSpec>): ExecResult {
-        return this.execClang(clangArgsForCppRuntime(target), action)
+        return this.execClang(clangArgsForCppRuntime(target), action, target)
     }
 
     fun execKonanClang(target: KonanTarget, action: Action<in ExecSpec>): ExecResult {
-        return this.execClang(clangArgsForCppRuntime(target), action)
+        return this.execClang(clangArgsForCppRuntime(target), action, target.name)
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class ExecClang @Inject constructor(
             executable = if (target.family.isAppleFamily) {
                 resolveToolchainExecutable(target, executable)
             } else {
-                resolveExecutable(executable)
+                resolveExecutable(executable, target.name)
             }
             args = defaultArgs + args
         }
@@ -127,15 +127,18 @@ abstract class ExecClang @Inject constructor(
         return execOperations.exec(extendedAction)
     }
 
-    private fun execClang(defaultArgs: List<String>, action: Action<in ExecSpec>): ExecResult {
+    private fun execClang(defaultArgs: List<String>, action: Action<in ExecSpec>, target: String? = null): ExecResult {
         val extendedAction = Action<ExecSpec> {
             action.execute(this)
-            executable = resolveExecutable(executable)
+            executable = resolveExecutable(executable, target)
 
             val hostPlatform = platformManager.hostPlatform
             environment["PATH"] = fileOperations.configurableFiles(hostPlatform.clang.clangPaths).asPath +
                     File.pathSeparator + environment["PATH"]
             args = args + defaultArgs
+            if (target?.startsWith("ohos_") == true) {
+                args = args.filter { it != "-Werror" }
+            }
         }
         return execOperations.exec(extendedAction)
     }

@@ -247,7 +247,7 @@ private fun sshExecutor(project: Project, testTarget: KonanTarget): ExecutorServ
     private val environmentArgs: List<String> = when {
         testTarget.family.isAppleFamily ->
             listOf("export DYLD_LIBRARY_PATH=$remoteDir:\$DYLD_LIBRARY_PATH;")
-        testTarget.family in listOf(Family.LINUX, Family.ANDROID) ->
+        testTarget.family in listOf(Family.LINUX, Family.OHOS, Family.ANDROID) ->
             listOf("export LD_LIBRARY_PATH=$remoteDir:\$LD_LIBRARY_PATH;")
         else -> emptyList()
     }

@@ -115,6 +115,8 @@ private class KotlinTargetHierarchyBuilderImpl(
 
     override fun withLinux() = addTargets { it is KotlinNativeTarget && it.konanTarget.family == Family.LINUX }
 
+    override fun withOhos() = addTargets { it is KotlinNativeTarget && it.konanTarget.family == Family.OHOS }
+
     override fun withAndroidNative() = addTargets { it is KotlinNativeTarget && it.konanTarget.family == Family.ANDROID }
 
     override fun withJs() = addTargets { it is KotlinJsTargetDsl }
@@ -213,6 +215,10 @@ private class KotlinTargetHierarchyBuilderImpl(
 
     override fun withLinuxArm64() = addTargets {
         it is KotlinNativeTarget && it.konanTarget == KonanTarget.LINUX_ARM64
+    }
+
+    override fun withOhosArm64() = addTargets {
+        it is KotlinNativeTarget && it.konanTarget == KonanTarget.OHOS_ARM64
     }
 
     @Deprecated(DEPRECATED_TARGET_MESSAGE)

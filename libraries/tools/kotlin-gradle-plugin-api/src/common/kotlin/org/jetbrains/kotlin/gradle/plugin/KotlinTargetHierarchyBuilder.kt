@@ -72,4 +72,6 @@ interface KotlinTargetHierarchyBuilder {
 
     @Deprecated(DEPRECATED_TARGET_MESSAGE)
     fun withWasm32()
+    fun withOhosArm64()
+    fun withOhos()
 }

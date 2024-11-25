@@ -38,7 +38,7 @@ open class CoverageTest : DefaultTask() {
     private val llvmToolsDir = if (configurables is AppleConfigurables) {
         "${configurables.absoluteTargetToolchain}/usr/bin"
     } else {
-        "${configurables.absoluteLlvmHome}/bin"
+        "${configurables.absoluteLlvmHome()}/bin"
     }
 
     @Input

@@ -52,6 +52,7 @@ open class HostManager(
         LINUX_ARM64,
         LINUX_MIPS32,
         LINUX_MIPSEL32,
+        OHOS_ARM64,
         MINGW_X86,
         MINGW_X64,
         ANDROID_X86,

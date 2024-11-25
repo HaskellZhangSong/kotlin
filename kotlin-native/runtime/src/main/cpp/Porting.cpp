@@ -217,11 +217,11 @@ NO_EXTERNAL_CALLS_CHECK bool isOnThreadExitNotSetOrAlreadyStarted() {
     return terminationKey != 0 && pthread_getspecific(terminationKey) == nullptr;
 }
 
-#if KONAN_LINUX
+#if KONAN_LINUX || KONAN_OHOS
 static pthread_key_t dummyKey;
 #endif
 static void onThreadExitInit() {
-#if KONAN_LINUX
+#if KONAN_LINUX || KONAN_OHOS
   // Due to glibc bug we have to create first key as dummy, to avoid
   // conflicts with potentially uninitialized dlfcn error key.
   // https://code.woboq.org/userspace/glibc/dlfcn/dlerror.c.html#237
@@ -254,7 +254,7 @@ void onThreadExit(void (*destructor)(void*), void* destructorParameter) {
 #endif  // !KONAN_NO_THREADS
 }
 
-#if KONAN_LINUX
+#if KONAN_LINUX || KONAN_OHOS
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/syscall.h>
@@ -284,7 +284,7 @@ NO_EXTERNAL_CALLS_CHECK int currentThreadId() {
     return tid;
 #elif KONAN_ANDROID
     return gettid();
-#elif KONAN_LINUX
+#elif KONAN_LINUX || KONAN_OHOS
     return gettid();
 #elif KONAN_WINDOWS
   return GetCurrentThreadId();

@@ -44,7 +44,7 @@ internal class BitcodeCompiler(val generationState: NativeGenerationState) {
     }
 
     private fun hostLlvmTool(tool: String, vararg arg: String) {
-        val absoluteToolName = "${platform.absoluteLlvmHome}/bin/$tool"
+        val absoluteToolName = "${platform.absoluteLlvmHome()}/bin/$tool"
         runTool(absoluteToolName, *arg)
     }
 

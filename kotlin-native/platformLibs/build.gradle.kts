@@ -73,7 +73,13 @@ konanTargetList.forEach { target ->
                     klibs(df.config.depends.map { "${fileNamePrefix}${it}" })
                 }
                 extraOpts("-Xpurge-user-libs", "-Xshort-module-name", df.name)
-                compilerOpts("-fmodules-cache-path=${project.buildDir}/clangModulesCache")
+                // compilerOpts("-fmodules-cache-path=${project.buildDir}/clangModulesCache")
+                val compilerOptions = mutableListOf<String>()
+                compilerOptions.add("-fmodules-cache-path=${project.buildDir}/clangModulesCache")
+                if (targetName == "ohos_arm64") {
+                    compilerOptions.add("-I/root/ohos/linux/native/sysroot/usr/include/aarch64-linux-ohos")
+                }
+                compilerOpts(*compilerOptions.toTypedArray())
             }
         }
 

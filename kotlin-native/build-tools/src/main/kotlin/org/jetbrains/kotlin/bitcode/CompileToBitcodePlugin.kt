@@ -229,7 +229,7 @@ open class CompileToBitcodeExtension @Inject constructor(val project: Project) :
             compilationDatabase.target(_target) {
                 entry {
                     val compileTask = this@apply.get()
-                    val args = listOf(execClang.resolveExecutable(compileTask.compiler.get())) + compileTask.compilerFlags.get() + execClang.clangArgsForCppRuntime(target.name)
+                    val args = listOf(execClang.resolveExecutable(compileTask.compiler.get(), target.name)) + compileTask.compilerFlags.get() + execClang.clangArgsForCppRuntime(target.name)
                     directory.set(compileTask.compilerWorkingDirectory)
                     files.setFrom(compileTask.inputFiles)
                     arguments.set(args)

@@ -70,7 +70,7 @@ private abstract class CompileToBitcodeJob : WorkAction<CompileToBitcodeJob.Para
             }
 
             // TODO: Extract llvm-link out. This will allow parallelizing clang compilation.
-            execOperations.execLlvmUtility(platformManager.get(), "llvm-link") {
+            execOperations.execLlvmUtility(platformManager.get(), "llvm-link", targetName.get()) {
                 args = listOf("-o", llvmLinkOutputFile.asFile.get().absolutePath) + llvmLinkArgs.get() + compilerWorkUnits.get().map { it.output.absolutePath }
             }
         }

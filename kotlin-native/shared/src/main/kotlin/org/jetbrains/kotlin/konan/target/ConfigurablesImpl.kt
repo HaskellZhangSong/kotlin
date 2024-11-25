@@ -24,6 +24,12 @@ class GccConfigurablesImpl(target: KonanTarget, properties: Properties, baseDir:
         get() = super.dependencies + listOfNotNull(emulatorDependency)
     }
 
+class OhosConfigurablesImpl(target: KonanTarget, properties: Properties, baseDir: String?)
+    : OhosConfigurables, KonanPropertiesLoader(target, properties, baseDir), ConfigurablesWithEmulator {
+    override val dependencies: List<String>
+        get() = super.dependencies + listOfNotNull(emulatorDependency)
+}
+
 class AndroidConfigurablesImpl(target: KonanTarget, properties: Properties, baseDir: String?)
     : AndroidConfigurables, KonanPropertiesLoader(target, properties, baseDir)
 
@@ -36,6 +42,8 @@ class ZephyrConfigurablesImpl(target: KonanTarget, properties: Properties, baseD
 
 fun loadConfigurables(target: KonanTarget, properties: Properties, baseDir: String?): Configurables = when (target.family) {
     Family.LINUX -> GccConfigurablesImpl(target, properties, baseDir)
+
+    Family.OHOS -> OhosConfigurablesImpl(target, properties, baseDir)
 
     Family.TVOS, Family.WATCHOS, Family.IOS, Family.OSX -> AppleConfigurablesImpl(target, properties, baseDir)
 
